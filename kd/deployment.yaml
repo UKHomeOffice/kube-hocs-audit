@@ -64,17 +64,17 @@ spec:
             - name: DB_HOSTNAME
               valueFrom:
                 secretKeyRef:
-                  name: {{.KUBE_NAMESPACE}}-rds-audit
+                  name: {{.KUBE_NAMESPACE}}-rds
                   key: endpoint
             - name: DB_NAME
               valueFrom:
                 secretKeyRef:
-                  name: {{.KUBE_NAMESPACE}}-rds-audit
+                  name: {{.KUBE_NAMESPACE}}-rds
                   key: db_name
             - name: ROOT_DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{.KUBE_NAMESPACE}}-rds-audit
+                  name: {{.KUBE_NAMESPACE}}-rds
                   key: password
             - name: DB_SCHEMA_NAME
               valueFrom:
@@ -251,17 +251,17 @@ spec:
             - name: DB_HOST
               valueFrom:
                 secretKeyRef:
-                  name: {{.KUBE_NAMESPACE}}-rds-audit
+                  name: {{.KUBE_NAMESPACE}}-rds
                   key: endpoint
             - name: DB_PORT
               valueFrom:
                 secretKeyRef:
-                  name: {{.KUBE_NAMESPACE}}-rds-audit
+                  name: {{.KUBE_NAMESPACE}}-rds
                   key: port
             - name: DB_NAME
               valueFrom:
                 secretKeyRef:
-                  name: {{.KUBE_NAMESPACE}}-rds-audit
+                  name: {{.KUBE_NAMESPACE}}-rds
                   key: db_name
             - name: DB_SCHEMA_NAME
               valueFrom:
