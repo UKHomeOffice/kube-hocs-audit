@@ -34,15 +34,17 @@ if [[ -z ${KUBE_TOKEN} ]] ; then
     exit -1
 fi
 
-if [ "${ENVIRONMENT}" == "prod" ] ; then	
-    export KC_REALM=https://sso.digital.homeoffice.gov.uk/auth/realms/hocs-prod	
-else	
+if [[ "${KUBE_NAMESPACE}" == "wcs-prod" ]] ; then
+    export KC_REALM=https://sso.digital.homeoffice.gov.uk/auth/realms/HOCS
+elif [[ "${ENVIRONMENT}" == "prod" ]] ; then
+    export KC_REALM=https://sso.digital.homeoffice.gov.uk/auth/realms/hocs-prod
+else
     export KC_REALM=https://sso-dev.notprod.homeoffice.gov.uk/auth/realms/hocs-notprod	
 fi	
 
- export DOMAIN_NAME=${DNS_PREFIX}.homeoffice.gov.uk	
+export DOMAIN_NAME=${DNS_PREFIX}.homeoffice.gov.uk
 
- echo	
+echo
 echo "Deploying hocs-frontend to ${ENVIRONMENT}"	
 echo "Keycloak realm: ${KC_REALM}"	
 echo "Keycloak domain: ${KC_DOMAIN}"	
