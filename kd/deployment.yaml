@@ -103,7 +103,7 @@ spec:
                   key: rds_password      
       containers:
         - name: keycloak-proxy
-          image: quay.io/ukhomeofficedigital/go-keycloak-proxy:v2.3.0
+          image: quay.io/keycloak/keycloak-gatekeeper:8.0.2
           imagePullPolicy: Always
           securityContext:
             runAsNonRoot: true
@@ -114,6 +114,12 @@ spec:
             requests:
               memory: "64Mi"
               cpu: 50m
+          env:
+            - name: ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: hocs-frontend
+                  key: encryption_key
           args:
             - --config=/etc/secrets/data.yml
             - --discovery-url={{.KC_REALM}}
@@ -129,7 +135,6 @@ spec:
             - --server-write-timeout=60s
             - --no-redirects=false
             - --redirection-url=https://{{.DOMAIN_NAME}}
-            - --cors-origins='*'
             - --secure-cookie=true
             - --http-only-cookie=true
             - --revocation-url={{.KC_REALM}}/protocol/openid-connect/logout
@@ -139,6 +144,9 @@ spec:
             - --resources=uri=/export/TRO*|roles=DCU_EXPORT_USER
             - --resources=uri=/export/TRO*|roles=DCU_EXPORT_USER
             - --verbose
+            - --enable-refresh-tokens=true
+            - --encryption-key=$(ENCRYPTION_KEY)
+            - --cookie-domain={{.DOMAIN_NAME}}
           ports:
             - name: keycloak-http
               containerPort: 8081
