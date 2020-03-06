@@ -142,7 +142,8 @@ spec:
             - --enable-default-deny=true
             - --resources=uri=/export/MIN*|roles=DCU_EXPORT_USER
             - --resources=uri=/export/TRO*|roles=DCU_EXPORT_USER
-            - --resources=uri=/export/TRO*|roles=DCU_EXPORT_USER
+            - --resources=uri=/export/DTEN*|roles=DCU_EXPORT_USER
+            - --resources=uri=/export/WCS*|roles=WCS_EXPORT_USER
             - --verbose
             - --enable-refresh-tokens=true
             - --encryption-key=$(ENCRYPTION_KEY)
