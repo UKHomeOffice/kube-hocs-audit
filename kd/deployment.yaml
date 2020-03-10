@@ -144,6 +144,9 @@ spec:
             - --resources=uri=/export/TRO*|roles=DCU_EXPORT_USER
             - --resources=uri=/export/DTEN*|roles=DCU_EXPORT_USER
             - --resources=uri=/export/WCS*|roles=WCS_EXPORT_USER
+            - --resources=uri=/export/topics*|roles=DCU_EXPORT_USER
+            - --resources=uri=/export/teams*|roles=DCU_EXPORT_USER,WCS_EXPORT_USER
+            - --resources=uri=/export/users*|roles=DCU_EXPORT_USER,WCS_EXPORT_USER
             - --verbose
             - --enable-refresh-tokens=true
             - --encryption-key=$(ENCRYPTION_KEY)
