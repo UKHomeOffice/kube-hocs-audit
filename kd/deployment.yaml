@@ -308,6 +308,8 @@ spec:
                   key: secret_access_key
             - name: HOCS_INFO_SERVICE
               value: 'https://hocs-info-service.{{.KUBE_NAMESPACE}}.svc.cluster.local'
+            - name: HOCS_CASE_SERVICE
+              value: 'https://hocs-casework.{{.KUBE_NAMESPACE}}.svc.cluster.local'
             - name: HOCS_BASICAUTH
               valueFrom:
                 secretKeyRef:
