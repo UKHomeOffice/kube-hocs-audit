@@ -54,8 +54,8 @@ spec:
               readOnly: true
           resources:
             limits:
-              memory: 50Mi
-              cpu: 500m
+              memory: 48Mi
+              cpu: 900m
             requests:
               memory: 15Mi
               cpu: 300m
@@ -111,8 +111,8 @@ spec:
                   key: rds_password      
           resources:
             limits:
-              memory: 16Mi
-              cpu: 200m
+              memory: 32Mi
+              cpu: 400m
             requests:
               memory: 4Mi
               cpu: 100m
@@ -125,10 +125,10 @@ spec:
             runAsNonRoot: true
           resources:
             limits:
-              memory: "16Mi"
-              cpu: 200m
+              memory: 32Mi
+              cpu: 400m
             requests:
-              memory: "8Mi"
+              memory: 8Mi
               cpu: 100m
           env:
             - name: ENCRYPTION_KEY
@@ -201,8 +201,8 @@ spec:
               readOnly: true
           resources:
             limits:
-              memory: 16Mi
-              cpu: 150m
+              memory: 32Mi
+              cpu: 400m
             requests:
               memory: 8Mi
               cpu: 100m
@@ -216,13 +216,6 @@ spec:
               drop:
                 - SETUID
                 - SETGID
-          resources:
-            limits:
-              memory: 16Mi
-              cpu: 200m
-            requests:
-              memory: 4Mi
-              cpu: 100m
           env:
             - name: PROXY_SERVICE_HOST_1
               value: '127.0.0.1'
@@ -263,7 +256,14 @@ spec:
           ports:
             - name: https
               containerPort: 10443
-              
+          resources:
+            limits:
+              memory: 32Mi
+              cpu: 400m
+            requests:
+              memory: 4Mi
+              cpu: 100m
+
         - name: hocs-audit
           image: quay.io/ukhomeofficedigital/hocs-audit:{{.VERSION}}
           imagePullPolicy: Always
@@ -342,11 +342,11 @@ spec:
                   key: plaintext
           resources:
             limits:
-              cpu: 850m
+              cpu: 900m
               memory: 1536Mi
             requests:
               cpu: 200m
-              memory: 1024Mi
+              memory: 896Mi
           ports:
             - name: http
               containerPort: 8080
