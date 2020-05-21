@@ -1,5 +1,5 @@
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hocs-audit
@@ -52,6 +52,14 @@ spec:
             - name: bundle
               mountPath: /etc/ssl/certs
               readOnly: true
+          resources:
+            limits:
+              memory: 48Mi
+              cpu: 900m
+            requests:
+              memory: 15Mi
+              cpu: 300m
+
         - name: db-initialise
           image: docker.digital.homeoffice.gov.uk/hocs-db-provision:latest
           securityContext:
@@ -101,19 +109,33 @@ spec:
                 secretKeyRef:
                   name: hocs-db-readonly
                   key: rds_password      
+          resources:
+            limits:
+              memory: 32Mi
+              cpu: 400m
+            requests:
+              memory: 4Mi
+              cpu: 100m
+
       containers:
         - name: keycloak-proxy
-          image: quay.digital.homeoffice.gov.uk/ukhomeofficedigital/go-keycloak-proxy:v2.3.0
+          image: quay.digital.homeoffice.gov.uk/keycloak/keycloak-gatekeeper:8.0.2
           imagePullPolicy: Always
           securityContext:
             runAsNonRoot: true
           resources:
             limits:
-              memory: "128Mi"
-              cpu: 100m
+              memory: 32Mi
+              cpu: 400m
             requests:
-              memory: "64Mi"
-              cpu: 50m
+              memory: 8Mi
+              cpu: 100m
+          env:
+            - name: ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: hocs-frontend
+                  key: encryption_key
           args:
             - --config=/etc/secrets/data.yml
             - --discovery-url={{.KC_REALM}}
@@ -129,7 +151,6 @@ spec:
             - --server-write-timeout=60s
             - --no-redirects=false
             - --redirection-url=https://{{.DOMAIN_NAME}}
-            - --cors-origins='*'
             - --secure-cookie=true
             - --http-only-cookie=true
             - --revocation-url={{.KC_REALM}}/protocol/openid-connect/logout
@@ -137,8 +158,15 @@ spec:
             - --enable-default-deny=true
             - --resources=uri=/export/MIN*|roles=DCU_EXPORT_USER
             - --resources=uri=/export/TRO*|roles=DCU_EXPORT_USER
-            - --resources=uri=/export/TRO*|roles=DCU_EXPORT_USER
+            - --resources=uri=/export/DTEN*|roles=DCU_EXPORT_USER
+            - --resources=uri=/export/WCS*|roles=WCS_EXPORT_USER
+            - --resources=uri=/export/topics*|roles=DCU_EXPORT_USER
+            - --resources=uri=/export/teams*|roles=DCU_EXPORT_USER,WCS_EXPORT_USER|require-any-role=true
+            - --resources=uri=/export/users*|roles=DCU_EXPORT_USER,WCS_EXPORT_USER|require-any-role=true
             - --verbose
+            - --enable-refresh-tokens=true
+            - --encryption-key=$(ENCRYPTION_KEY)
+            - --cookie-domain={{.DOMAIN_NAME}}
           ports:
             - name: keycloak-http
               containerPort: 8081
@@ -146,6 +174,7 @@ spec:
             - mountPath: /etc/secrets
               name: frontend-keycloak-secret
               readOnly: true
+
         - name: certs
           image: quay.digital.homeoffice.gov.uk/ukhomeofficedigital/cfssl-sidekick:v0.0.6
           securityContext:
@@ -170,6 +199,13 @@ spec:
             - name: bundle
               mountPath: /etc/ssl/certs
               readOnly: true
+          resources:
+            limits:
+              memory: 32Mi
+              cpu: 400m
+            requests:
+              memory: 8Mi
+              cpu: 100m
 
         - name: proxy
           image: quay.digital.homeoffice.gov.uk/ukhomeofficedigital/nginx-proxy:v3.4.12
@@ -180,13 +216,6 @@ spec:
               drop:
                 - SETUID
                 - SETGID
-          resources:
-            limits:
-              memory: 512Mi
-              cpu: 250m
-            requests:
-              memory: 256Mi
-              cpu: 150m
           env:
             - name: PROXY_SERVICE_HOST_1
               value: '127.0.0.1'
@@ -212,6 +241,8 @@ spec:
               value: /certs/tls-key.pem
             - name: ADD_NGINX_SERVER_CFG
               value: 'location = /reload { allow 127.0.0.1; deny all; content_by_lua_block { os.execute("touch /tmp/nginx-reload-triggered; /usr/local/openresty/nginx/sbin/nginx -s reload; touch /tmp/nginx-reload-complete;") } }'
+            - name: ADD_NGINX_HTTP_CFG
+              value: 'fastcgi_buffers 16 64k; fastcgi_buffer_size 128k; proxy_buffer_size 128k; proxy_buffers 4 64k; proxy_busy_buffers_size 128k; client_header_buffer_size 8k; large_client_header_buffers 4 128k;'            
           volumeMounts:
             - name: certs
               mountPath: /certs
@@ -225,6 +256,14 @@ spec:
           ports:
             - name: https
               containerPort: 10443
+          resources:
+            limits:
+              memory: 32Mi
+              cpu: 400m
+            requests:
+              memory: 4Mi
+              cpu: 100m
+
         - name: hocs-audit
           image: quay.digital.homeoffice.gov.uk/ukhomeofficedigital/hocs-audit:{{.VERSION}}
           imagePullPolicy: Always
@@ -294,6 +333,8 @@ spec:
                   key: secret_access_key
             - name: HOCS_INFO_SERVICE
               value: 'https://hocs-info-service.{{.KUBE_NAMESPACE}}.svc.cluster.local'
+            - name: HOCS_CASE_SERVICE
+              value: 'https://hocs-casework.{{.KUBE_NAMESPACE}}.svc.cluster.local'
             - name: HOCS_BASICAUTH
               valueFrom:
                 secretKeyRef:
@@ -301,11 +342,11 @@ spec:
                   key: plaintext
           resources:
             limits:
-              cpu: 850m
-              memory: 2048Mi
+              cpu: 900m
+              memory: 1536Mi
             requests:
               cpu: 200m
-              memory: 512Mi
+              memory: 896Mi
           ports:
             - name: http
               containerPort: 8080
