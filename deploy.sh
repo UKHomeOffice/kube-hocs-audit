@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euxo pipefail # make bash quit if something weird happens
 
 export KUBE_NAMESPACE=${ENVIRONMENT}
 export KUBE_SERVER=${KUBE_SERVER}
