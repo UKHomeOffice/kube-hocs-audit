@@ -55,7 +55,7 @@ elif [[ "${ENVIRONMENT}" == "cs-prod" ]] ; then
     export DNS_PREFIX=www.${DOMAIN}
     export KC_REALM=https://sso.digital.homeoffice.gov.uk/auth/realms/hocs-prod
 else
-    export DNS_PREFIX=${DOMAIN}.${DOMAIN}-notprod
+    export DNS_PREFIX=${DOMAIN}-notprod
     export KC_REALM=https://sso-dev.notprod.homeoffice.gov.uk/auth/realms/hocs-notprod
 fi
 
