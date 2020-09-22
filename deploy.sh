@@ -36,10 +36,12 @@ elif [[ ${ENVIRONMENT} == "cs-dev" ]] ; then
     echo "deploy ${VERSION} to DEV namespace, using HOCS_AUDIT_CS_DEV drone secret"
     export KUBE_TOKEN=${HOCS_AUDIT_CS_DEV}
     export REPLICAS="1"
+    export DOMAIN="dev.internal.cs"
 elif [[ ${ENVIRONMENT} == "wcs-dev" ]] ; then
     echo "deploy ${VERSION} to DEV namespace, using HOCS_AUDIT_WCS_DEV drone secret"
     export KUBE_TOKEN=${HOCS_AUDIT_WCS_DEV}
     export REPLICAS="1"
+    export DOMAIN="dev.wcs"
 else
     echo "Unable to find environment: ${ENVIRONMENT}"
 fi
