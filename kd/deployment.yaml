@@ -144,11 +144,11 @@ spec:
             - --enable-logging=true
             - --enable-json-logging=true
             - --upstream-url=http://127.0.0.1:8080
-            - --upstream-response-header-timeout=60s
-            - --upstream-expect-continue-timeout=60s
-            - --upstream-keepalive-timeout=60s
-            - --server-read-timeout=60s
-            - --server-write-timeout=60s
+            - --upstream-response-header-timeout={{.PROXY_TIMEOUT}}s
+            - --upstream-expect-continue-timeout={{.PROXY_TIMEOUT}}s
+            - --upstream-keepalive-timeout={{.PROXY_TIMEOUT}}s
+            - --server-read-timeout={{.PROXY_TIMEOUT}}s
+            - --server-write-timeout={{.PROXY_TIMEOUT}}s
             - --no-redirects=false
             - --redirection-url=https://{{.DOMAIN_NAME}}
             - --secure-cookie=true
@@ -251,9 +251,9 @@ spec:
                 proxy_buffer_size 128k;
                 proxy_buffers 4 64k;
                 proxy_busy_buffers_size 128k;
-                proxy_connect_timeout 300;
-                proxy_read_timeout 300;
-                proxy_send_timeout 300;
+                proxy_connect_timeout {{.PROXY_TIMEOUT}};
+                proxy_read_timeout {{.PROXY_TIMEOUT}};
+                proxy_send_timeout {{.PROXY_TIMEOUT}};
           volumeMounts:
             - name: certs
               mountPath: /certs

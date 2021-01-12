@@ -17,6 +17,10 @@ else
     export MAX_REPLICAS="2"
 fi
 
+# passed to keycloak-gatekeeper and nginx for various proxy timeouts
+# the default is 60 seconds but audit has long-running queries
+export PROXY_TIMEOUT="300"
+
 if [[ ${ENVIRONMENT} == "cs-prod" ]] ; then
     echo "deploy ${VERSION} to PROD namespace, using HOCS_AUDIT_CS_PROD drone secret"
     export KUBE_TOKEN=${HOCS_AUDIT_CS_PROD}
