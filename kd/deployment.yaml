@@ -147,6 +147,7 @@ spec:
             - --upstream-response-header-timeout={{.PROXY_TIMEOUT}}s
             - --upstream-expect-continue-timeout={{.PROXY_TIMEOUT}}s
             - --upstream-keepalive-timeout={{.PROXY_TIMEOUT}}s
+            - --server-idle-timeout={{.PROXY_TIMEOUT}}s # default 120s
             - --server-read-timeout={{.PROXY_TIMEOUT}}s
             - --server-write-timeout={{.PROXY_TIMEOUT}}s
             - --no-redirects=false
