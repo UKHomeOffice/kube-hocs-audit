@@ -47,6 +47,9 @@ elif [[ ${ENVIRONMENT} == "wcs-dev" ]] ; then
     echo "deploy ${VERSION} to DEV namespace, using HOCS_AUDIT_WCS_DEV drone secret"
     export KUBE_TOKEN=${HOCS_AUDIT_WCS_DEV}
     export DOMAIN="dev.wcs"
+elif [[ ${ENVIRONMENT} == "hocs-qax" ]] ; then
+    echo "deploy ${VERSION} to qax namespace, using HOCS_AUDIT_QAX drone secret"
+    export KUBE_TOKEN=${HOCS_AUDIT_QAX}
 else
     echo "Unable to find environment: ${ENVIRONMENT}"
 fi
