@@ -9,9 +9,13 @@ export VERSION=${VERSION}
 # the default is 60 seconds but audit has long-running queries
 export PROXY_TIMEOUT=${PROXY_TIMEOUT:-300}
 
+export DOMAIN="cs"
+if [ ${KUBE_NAMESPACE%-*} == "wcs" ]; then
+    export DOMAIN="wcs"
+fi
+
 if [[ ${KUBE_NAMESPACE} == *prod ]]
 then
-
     export MIN_REPLICAS="2"
     export MAX_REPLICAS="8"
     
