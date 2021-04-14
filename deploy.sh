@@ -55,4 +55,5 @@ cd kd || exit 1
 kd --timeout 10m \
     -f deployment.yaml \
     -f service.yaml \
-    -f autoscale.yaml
+    -f autoscale.yaml \
+    -f refreshDcuAggregatedCasesView.yaml
