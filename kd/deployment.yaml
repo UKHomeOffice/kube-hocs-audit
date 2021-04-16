@@ -165,6 +165,7 @@ spec:
             - --resources=uri=/export/topics*|roles=DCU_EXPORT_USER
             - --resources=uri=/export/teams*|roles=DCU_EXPORT_USER,WCS_EXPORT_USER,MPAM_EXPORT_USER|require-any-role=true
             - --resources=uri=/export/users*|roles=DCU_EXPORT_USER,WCS_EXPORT_USER,MPAM_EXPORT_USER|require-any-role=true
+            - --resources=uri=/export/custom/*/refresh|methods=POST|white-listed=true
             - --verbose
             - --enable-refresh-tokens=true
             - --encryption-key=$(ENCRYPTION_KEY)
