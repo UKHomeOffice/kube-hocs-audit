@@ -4,6 +4,7 @@ metadata:
   name: hocs-refresh-dcu-caseview
 spec:
   schedule: {{.REFRESH_CRON}}
+  concurrencyPolicy: Forbid
   jobTemplate:
     spec:
       backoffLimit: 0
