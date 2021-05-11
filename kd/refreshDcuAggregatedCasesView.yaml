@@ -1,3 +1,4 @@
+{{ if regexMatch "^(?:ho|)cs-\S*$" .KUBE_NAMESPACE }}
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
@@ -32,3 +33,4 @@ spec:
                   https://hocs-audit.{{.KUBE_NAMESPACE}}.svc.cluster.local/admin/export/custom/DCU_AGGREGATED_CASES/refresh );
                   if [[ $http_status -eq 200 ]]; then exit 0; else exit 1; fi
           restartPolicy: Never
+{{ end }}
