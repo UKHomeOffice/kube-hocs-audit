@@ -21,6 +21,7 @@ then
 
     # Specify to run the refresh cron-job at 5:30 every day for prod.
     export REFRESH_CRON="30 5 * * *"
+    export UPTIME_PERIOD="Mon-Sun 05:00-23:00 Europe/London"
     
     export CLUSTER_NAME="acp-prod"
     export KUBE_SERVER=https://kube-api-prod.prod.acp.homeoffice.gov.uk
@@ -30,6 +31,7 @@ else
 
     # Specify to run the refresh cron-job at 9:00 Mon-Friday for not-prod.
     export REFRESH_CRON="0 9 * * 1-5"
+    export UPTIME_PERIOD="Mon-Fri 08:00-18:00 Europe/London"
 
     export CLUSTER_NAME="acp-notprod"
     export KUBE_SERVER=https://kube-api-notprod.notprod.acp.homeoffice.gov.uk
